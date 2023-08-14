@@ -11,7 +11,7 @@ const Login = () => {
   const error = useSelector(selectError);
   return (
      <>
-      {user && <Navigate to="/" replace={true}></Navigate>}
+      {user!==null && <Navigate to="/" replace={true}></Navigate>}
         <div>
           <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -30,11 +30,11 @@ const Login = () => {
                 dispatch(checkUserAsync({ email: data.email, password: data.password }))
                 console.log({ email: data.email, password: data.password });
               })}>            <div>
-                  <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label htmlFor="email"  className="block text-sm font-medium leading-6 text-gray-900">
                     Email address
                   </label>
                   <div className="mt-2">
-                    <input
+                    <input autoComplete='true'
                       id="email"
                       {...register("email", { required: "Email is required", pattern: { value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/gi, message: "Invalid email address" } })}
                       type="email"
@@ -52,14 +52,15 @@ const Login = () => {
                       Password
                     </label>
                     <div className="text-sm">
-                      <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                      <Link to="/forgot-password" className="font-semibold text-indigo-600 hover:text-indigo-500">
                         Forgot password?
-                      </a>
+                      </Link>
                     </div>
                   </div>
                   <div className="mt-2">
                     <input
                       id="password"
+                      autoComplete='true'
                       {...register("password", {
                         required: "Password is required", pattern: {
                           value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm, message: `- at least 8 characters
@@ -67,8 +68,7 @@ const Login = () => {
                                     - Can contain special characters`}
                       })}
                       type="password"
-                      autoComplete="current-password"
-                      required
+                     
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                     <p className='text-red-500'>{errors.password && errors.password.message}</p>

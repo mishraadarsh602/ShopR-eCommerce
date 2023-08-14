@@ -10,17 +10,17 @@ import {
   selectBrands,
   fetchBrandsAsync,
   fetchCategoriesAsync
-} from '../productSlice';
+} from '../../product/productSlice';
 import { Link } from "react-router-dom";
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, ChevronLeftIcon, ChevronRightIcon, StarIcon, } from '@heroicons/react/20/solid'
 import { ITEMS_PER_PAGE } from '../../../app/constants';
-import { fetchBrands } from '../productAPI';
+// import { fetchBrands } from '../../brand/brandSlice';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
-export default function ProductList() {
+export default function AdminProductList() {
   const products = useSelector(selectAllProducts);
   const totalItems = useSelector(selectTotalItems);
   const categories = useSelector(selectCategories);
@@ -184,6 +184,11 @@ export default function ProductList() {
 
                   {/* Product grid */}
                   <div className="lg:col-span-3">
+                  <div className='px-4 py-0 sm:px-6 sm:py-2  lg:px-8'>
+                    <Link to="/admin/product-form">
+                      <button  className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded'>Add new Product</button>
+                      </Link> 
+                  </div>
                     {/*Product list page starts*/}
                   <ProductGrid products={products}></ProductGrid>
                     {/*Product list page ends*/}
@@ -364,6 +369,7 @@ function ProductGrid({products}){
 
                           {products.length === 0 ? "No Products Found!!" :
                             products.map((product) => (
+                             <div>
                               <Link key={product.id} to={`/product-detail/${product.id}`}>
                                 <div className="group relative border-2 border-solid border-gray-200 p-2">
                                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
@@ -392,10 +398,20 @@ function ProductGrid({products}){
 
 
                                     </div>
-
+                                 
                                   </div>
+                                  {product.deleted && <div>
+                                      <p className="text-sm font-medium text-red-500 ">Product Deleted</p>
+
+                                    </div>}
+
+                                 
                                 </div>
                               </Link>
+                               <div className='my-2'> 
+                               <Link to={`/admin/product-form/edit/${product.id}`} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Edit Product</Link>
+                             </div>
+                             </div>  
                             ))}
                         </div>
                       </div>

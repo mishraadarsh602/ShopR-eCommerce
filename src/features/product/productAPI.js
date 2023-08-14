@@ -8,6 +8,7 @@ export function fetchAllProducts() {
 
 });
 }
+
 //fetch product by id
 export function fetchProductById(id) {
 
@@ -20,6 +21,41 @@ export function fetchProductById(id) {
 
 });
 }
+
+//fetch product by id
+export function createProduct(product) {
+  return new Promise(async(resolve) =>{
+  const response = await fetch('http://localhost:8080/products/',{
+    method:"POST",
+    headers:{
+       "Content-Type":"application/json"
+    },
+    body:JSON.stringify(product)
+  })
+  const data  = await response.json()
+
+  resolve({data})
+  //  console.log("api productt ",data)
+
+});
+}
+
+//update product
+
+export function updateProduct(product){
+  return new Promise(async(resolve) =>{
+  const response = await fetch('http://localhost:8080/products/'+product.id,{
+     method:"PATCH",
+     headers:{
+        "Content-Type":"application/json"
+     },
+     body:JSON.stringify(product)
+  })
+  const data  = await response.json()
+  resolve({data})
+  })
+}
+
 
 export function fetchProductsByFilters(filter,sort,pagination) {
   //filter = {"category":["smartphones","laptops"]}

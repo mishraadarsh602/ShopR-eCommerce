@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {fetchAllProducts,fetchProductsByFilters,fetchBrands,fetchCategories,fetchProductById} from "./productAPI";
+import {fetchAllProducts,fetchProductsByFilters,fetchBrands,fetchCategories,fetchProductById, createProduct, updateProduct} from "./productAPI";
 const initialState = {
   products: [],
   status: 'idle',
@@ -60,13 +60,40 @@ export const fetchProductsByFiltersAsync = createAsyncThunk(
   }
 );
 
+
+
+//add  product
+export const createProductAsync = createAsyncThunk(
+  'product/createProduct',
+  async (product) => {
+    // console.log("slice product ",product)
+    const response = await createProduct(product);
+    return response.data;
+
+
+  }
+);
+
+
+//add  product
+export const updateProductAsync = createAsyncThunk(
+  'product/updateProduct',
+  async (product) => {
+    // console.log("slice product ",product)
+    const response = await updateProduct(product);
+    return response.data;
+
+
+  }
+);
+
+
 export const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
-    increment: (state) => {
-   
-      state.value += 1;
+    clearSelectedProduct: (state,action) => {
+      state.selectedProduct = null;
     },
    
   },
@@ -108,16 +135,31 @@ export const productSlice = createSlice({
       })
       .addCase(fetchProductByIdAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        // state.products += action.payload;
-        // state.products.concat(action.payload);
         state.selectedProduct = action.payload;
+
+      })
+      .addCase(createProductAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(createProductAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.products.push(action.payload);
+
+      })
+      .addCase(updateProductAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateProductAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+       const index = state.products.findIndex((el)=>el._id===action.payload._id);
+        state.products[index] = action.payload;
 
       })
   },
 });
 
 //action creators
-export const { increment } = productSlice.actions;
+export const { clearSelectedProduct } = productSlice.actions;
 
 //selectors
 export const selectAllProducts = (state) => state.product.products;

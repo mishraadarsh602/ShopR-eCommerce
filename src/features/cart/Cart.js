@@ -3,10 +3,10 @@ import React from 'react'
 // import {
 //     increment,incrementAsync,selectCount,
 // } from "./cartSlice"
-import { Link } from "react-router-dom";
-import { Fragment, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { Link, Navigate } from "react-router-dom";
+import {  useState } from 'react';
+// import { Dialog, Transition } from '@headlessui/react';
+// import { XMarkIcon } from '@heroicons/react/24/outline';
 import { deleteItemFromCartAsync, selectItems, updateCartAsync } from './cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,7 +26,9 @@ const Cart = () => {
         dispatch(deleteItemFromCartAsync(item.id));
     }
     return (
-        <div className="mx-auto mt-8 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
+         <>
+           {!items.length && <Navigate to="/" replace={true}> </Navigate>}
+           <div className="mx-auto mt-8 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl my-5 pt-5 font-bold tracking-tight text-gray-900">Cart</h1>
 
             <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
@@ -46,7 +48,7 @@ const Cart = () => {
                                     <div>
                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                             <h3>
-                                                <a href={item.href}>{item.name}</a>
+                                                <span >{item.name}</span>
                                             </h3>
                                             <p className="ml-4">{item.price}</p>
                                         </div>
@@ -95,12 +97,12 @@ const Cart = () => {
                 <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                 <div className="mt-6">
                     <Link to="/checkout" >
-                        <a
-                            href="#"
+                        <span
+                          
                             className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
                             Checkout
-                        </a>
+                        </span>
                     </Link>
                 </div>
                 <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
@@ -119,7 +121,8 @@ const Cart = () => {
                     </p>
                 </div>
             </div>
-        </div>
+           </div>
+        </>
 
     )
 }
