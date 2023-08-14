@@ -9,6 +9,7 @@ import {  useState } from 'react';
 // import { XMarkIcon } from '@heroicons/react/24/outline';
 import { deleteItemFromCartAsync, selectItems, updateCartAsync } from './cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { discountedPrice } from '../../app/constants';
 
 const Cart = () => {
     // useSelector(selectCount);
@@ -16,7 +17,7 @@ const Cart = () => {
     const [open, setOpen] = useState(true);
     const items = useSelector(selectItems);
 
-    const totalAmount = items.reduce((amount, item) => amount + item.price * item.quantity, 0);
+    const totalAmount = items.reduce((amount, item) => amount + discountedPrice(item) * item.quantity, 0);
     const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
     const handleQuantity = (e,item)=>{
@@ -50,7 +51,7 @@ const Cart = () => {
                                             <h3>
                                                 <span >{item.name}</span>
                                             </h3>
-                                            <p className="ml-4">{item.price}</p>
+                                            <p className="ml-4">{discountedPrice(item)}</p>
                                         </div>
                                         <p className="mt-1 text-sm text-gray-500">{item.name} {item.brand}</p>
                                     </div>
