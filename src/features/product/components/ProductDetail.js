@@ -11,6 +11,8 @@ import { addToCartAsync, selectItems } from '../../cart/cartSlice';
 // import { selectUserInfo } from '../../user/userSlice';
 import { discountedPrice } from '../../../app/constants';
 import { selectLoggedInUser } from '../../auth/authSlice';
+import { useAlert } from "react-alert";
+
 const colors = [
   { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
   { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
@@ -51,6 +53,7 @@ export default function ProductDetail() {
   // console.log(cart);
   const dispatch = useDispatch();
   const params = useParams();
+  const alert  = useAlert();
   useEffect(() => {
     // console.log("id : ",params.id)
     dispatch(fetchProductByIdAsync(params.id))
@@ -63,9 +66,12 @@ export default function ProductDetail() {
       const newItem = { ...product, productId: product.id, quantity: 1, user: user.id }
       delete newItem["id"];
       dispatch(addToCartAsync(newItem))
+      //TODO : It will be based on server response of backend
+      alert.success("Item added to Cart");
 
     } else {
-      alert("Already in cart")
+      alert.info("Item Already added to Cart");
+
     }
   }
 
@@ -280,7 +286,10 @@ export default function ProductDetail() {
                 >
                   Add to Cart
                 </button>
+               
+
               </form>
+             
             </div>
 
             <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">

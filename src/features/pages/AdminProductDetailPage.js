@@ -1,5 +1,6 @@
 import Navbar from "../navbar/Navbar"
 import AdminProductDetail from '../admin/components/AdminProductDetail';
+import Footer from "../common/Footer";
 
 const AdminProductDetailPage = () => {
   return (
@@ -8,6 +9,8 @@ const AdminProductDetailPage = () => {
          <AdminProductDetail/>
 
          </Navbar>
+         <Footer/>
+
     </div>
   )
 }

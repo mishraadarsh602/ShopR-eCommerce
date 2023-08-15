@@ -65,13 +65,14 @@ const handleAdd = (address) => {
                         type="submit"
                         className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                        Add New  Address
+                        Add New Address
                     </button>
                     {showAddAddressForm ? (
                                 <form className='bg-white px-5 mt-8 py-5' noValidate onSubmit={handleSubmit((data) => {
                                     handleAdd(data);
-                                    reset()
-                                    console.log(data);
+                                    //to clear submitted form
+                                    reset();
+                                    // console.log(data);
                                 })}>
                                     <div className="space-y-12">
                                         <div className="border-b border-gray-900/10 pb-12">

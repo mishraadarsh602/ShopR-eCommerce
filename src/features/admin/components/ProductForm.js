@@ -1,8 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { clearSelectedProduct, createProductAsync, fetchProductByIdAsync, selectBrands, selectCategories, selectProductById, updateProductAsync } from '../../product/productSlice';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import Modal from '../../common/Modal';
+
 const ProductForm = () => {
     const brands = useSelector(selectBrands);
     const categories = useSelector(selectCategories);
@@ -11,6 +13,8 @@ const ProductForm = () => {
     const selectedProduct = useSelector(selectProductById);
     // console.log("product: ", selectedProduct);
     const params = useParams();
+    const [openModal, setOpenModal] = useState(null);
+
 
     useEffect(() => {
         if (params.id) {
@@ -80,7 +84,7 @@ return (
                 <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="text-base font-semibold leading-7 text-gray-900">Add Product</h2>
 
-
+                   {selectedProduct && selectedProduct.deleted && <h1 className='text-red-400'>Item is  deleted</h1>}
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-4">
                             <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
@@ -344,7 +348,8 @@ return (
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-                {selectedProduct && <button onClick={handleDelete} type="button" className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          
+                {selectedProduct && !selectedProduct.deleted && <button onClick={e=>{setOpenModal(true)}} type="button" className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 >
                    Delete
                 </button>}
@@ -360,6 +365,15 @@ return (
                 </button>
             </div>
         </form>
+        {selectedProduct && <Modal 
+                title={`Delete ${selectedProduct.title}`}
+                message={`Are you sure you want to delete ?`}
+                dangerOption={`Delete`}
+                cancelOption={`Cancel`}
+                dangerAction={handleDelete}
+                cancelAction={()=>setOpenModal(null)}
+                showModal={openModal}
+            />}
     </div>
 )
 }

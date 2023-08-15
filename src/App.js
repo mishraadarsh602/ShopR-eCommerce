@@ -27,7 +27,14 @@ import AdminHome from './features/pages/AdminHome';
 import AdminProductDetailPage from './features/pages/AdminProductDetailPage';
 import AdminProductFormPage from './features/pages/AdminProductFormPage';
 import AdminOrdersPage from './features/pages/AdminOrdersPage';
+//react alert
+import { positions, Provider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
 
+const options = {
+  timeout: 5000,
+  position: positions.BOTTOM_LEFT
+};
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,7 +42,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <ProtectedAdmin><AdminHome/></ProtectedAdmin>,
+    element: <ProtectedAdmin><AdminHome /></ProtectedAdmin>,
   },
   {
     path: "/login",
@@ -65,7 +72,7 @@ const router = createBrowserRouter([
     path: "/admin/product-form",
     element: <ProtectedAdmin><AdminProductFormPage /></ProtectedAdmin>,
   },
-    {
+  {
     path: "/admin/product-form/edit/:id",
     element: <ProtectedAdmin><AdminProductFormPage /></ProtectedAdmin>,
   },
@@ -109,7 +116,10 @@ function App() {
   }, [dispatch, user])
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      <Provider template={AlertTemplate} {...options}>
+        <RouterProvider router={router} />
+      </Provider>
+
     </div>
   );
 }

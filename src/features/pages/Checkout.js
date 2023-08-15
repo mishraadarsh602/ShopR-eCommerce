@@ -1,4 +1,3 @@
-import React from 'react'
 import { deleteItemFromCartAsync, selectItems, updateCartAsync } from '../../features/cart/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Navigate } from "react-router-dom"
@@ -70,7 +69,7 @@ const Checkout = () => {
                         <form className='bg-white px-5 mt-8 py-5' noValidate onSubmit={handleSubmit((data)=>{
                        dispatch(updateUserAsync({...user,addresses:[...user.addresses,data]})) 
                        reset()
-                       console.log(data);
+                    //    console.log(data);
                         })}>
                             <div className="space-y-12">
                                 <div className="border-b border-gray-900/10 pb-12">

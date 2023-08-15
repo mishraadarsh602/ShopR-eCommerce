@@ -9,7 +9,8 @@ import {
   selectCategories,
   selectBrands,
   fetchBrandsAsync,
-  fetchCategoriesAsync
+  fetchCategoriesAsync,
+  selectProductListStatus
 } from '../productSlice';
 import { Link } from "react-router-dom";
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
@@ -18,6 +19,7 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, StarI
 import { ITEMS_PER_PAGE, discountedPrice } from '../../../app/constants';
 import Pagination from '../../common/Pagination';
 import { fetchBrands } from '../productAPI';
+import { Grid } from 'react-loader-spinner';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -44,6 +46,7 @@ export default function ProductList() {
   const [sort, setSort] = useState({});
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [page, setPage] = useState(1);
+  const status = useSelector(selectProductListStatus);
   const handleFilter = (e, section, option) => {
     // e.target.checked
     const newFilter = { ...filter };
@@ -94,16 +97,17 @@ export default function ProductList() {
     }
     dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }))
   }, [dispatch, filter, sort, page]);
+
   const sortOptions = [
     { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
     { name: 'Price: Low to High', sort: 'price', order: 'asc', current: false },
     { name: 'Price: High to Low', sort: 'price', order: 'desc', current: false },
-  ]
+  ];
 
   return (
-    <div>
-      <div>
+   
         <div className="bg-white">
+        
           <div>
             {/* Mobile filter dialog */}
             <MobileFilter filters={filters} handleFilter={handleFilter} mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen}></MobileFilter>
@@ -186,7 +190,7 @@ export default function ProductList() {
                   {/* Product grid */}
                   <div className="lg:col-span-3">
                     {/*Product list page starts*/}
-                    <ProductGrid products={products}></ProductGrid>
+                    <ProductGrid products={products} status={status}></ProductGrid>
                     {/*Product list page ends*/}
 
                   </div>
@@ -203,8 +207,7 @@ export default function ProductList() {
         </div>
 
 
-      </div>
-    </div>
+    
   );
 }
 
@@ -356,15 +359,25 @@ function MobileFilter({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter, f
     </Transition.Root>
   </>
 }
-function ProductGrid({ products }) {
+function ProductGrid({ products, status }) {
   return <>
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-2 lg:max-w-7xl lg:px-8">
 
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
 
-          {products.length === 0 ? "No Products Found!!" :
-            products.map((product) => (
+            {status==="loading" ? 
+            <Grid
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="grid-loading"
+            radius="12.5"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />:null}
+           { products.map((product) => (
               <Link key={product.id} to={`/product-detail/${product.id}`}>
                 <div className="group relative border-2 border-solid border-gray-200 p-2">
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">

@@ -369,8 +369,8 @@ function ProductGrid({ products }) {
 
           {products.length === 0 ? "No Products Found!!" :
             products.map((product) => (
-              <div>
-                <Link key={product.id} to={`/product-detail/${product.id}`}>
+              <div key={product.id}>
+                <Link  to={`/product-detail/${product.id}`}>
                   <div className="group relative border-2 border-solid border-gray-200 p-2">
                     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                       <img

@@ -1,3 +1,4 @@
+import Footer from "../common/Footer";
 import Navbar from "../navbar/Navbar"
 import UserOrders from "../user/components/UserOrders";
 
@@ -11,6 +12,8 @@ const UserOrdersPage = () => {
             <UserOrders/>
             </div>
          </Navbar>
+         <Footer/>
+
     </div>
   )
 }

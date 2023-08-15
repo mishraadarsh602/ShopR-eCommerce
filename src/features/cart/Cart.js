@@ -10,25 +10,26 @@ import {  useState } from 'react';
 import { deleteItemFromCartAsync, selectItems, updateCartAsync } from './cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { discountedPrice } from '../../app/constants';
+import Modal from '../common/Modal';
 
 const Cart = () => {
     // useSelector(selectCount);
     const dispatch=useDispatch();
     const [open, setOpen] = useState(true);
     const items = useSelector(selectItems);
-
+    const [openModal, setOpenModal] = useState(null);
     const totalAmount = items.reduce((amount, item) => amount + discountedPrice(item) * item.quantity, 0);
     const totalItems = items.reduce((total, item) => total + item.quantity, 0);
-
     const handleQuantity = (e,item)=>{
       dispatch(updateCartAsync({...item,quantity:+e.target.value}))
     }
-    const handleRemove=(e,item)=>{
+    const handleRemove=(item)=>{
         dispatch(deleteItemFromCartAsync(item.id));
     }
     return (
          <>
            {!items.length && <Navigate to="/" replace={true}> </Navigate>}
+          
            <div className="mx-auto mt-8 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl my-5 pt-5 font-bold tracking-tight text-gray-900">Cart</h1>
 
@@ -71,8 +72,17 @@ const Cart = () => {
                                             </select>
                                         </div>
                                         <div className="flex">
+                                        <Modal 
+                                            title={`Delete ${item.title}`}
+                                            message={`Are you sure you want to delete ?`}
+                                            dangerOption={`Delete`}
+                                            cancelOption={`Cancel`}
+                                            dangerAction={()=>handleRemove(item)}
+                                            cancelAction={()=>setOpenModal(-1)}
+                                            showModal={openModal===item.id}
+                                        />
                                             <button
-                                            onClick={(e)=>handleRemove(e,item)}
+                                            onClick={e=>{setOpenModal(item.id)}}
                                                 type="button"
                                                 className="font-medium text-indigo-600 hover:text-indigo-500"
                                             >

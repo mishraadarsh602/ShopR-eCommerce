@@ -1,5 +1,6 @@
 import Navbar from "../navbar/Navbar"
 import AdminProductList from '../admin/components/AdminProductList'
+import Footer from "../common/Footer"
 
 const Home = () => {
   return (
@@ -8,6 +9,8 @@ const Home = () => {
          <AdminProductList/>
 
          </Navbar>
+         <Footer/>
+
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import Footer from "../common/Footer";
 import Navbar from "../navbar/Navbar"
 import UserProfile from "../user/components/UserProfile";
 
@@ -11,6 +12,8 @@ const UserProfilePage = () => {
             <UserProfile/>
             </div>
          </Navbar>
+         <Footer/>
+
     </div>
   )
 }

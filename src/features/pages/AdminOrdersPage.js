@@ -1,6 +1,5 @@
-import Navbar from "../navbar/Navbar"
 import AdminOrders from "../admin/components/AdminOrders"
-
+import Navbar from "../navbar/Navbar";
 const AdminOrdersPage = () => {
   return (
     <div>

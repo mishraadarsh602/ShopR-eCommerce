@@ -16,7 +16,7 @@ export const fetchProductByIdAsync = createAsyncThunk(
   async (id) => {
     // console.log("slice",id)
     const response = await fetchProductById(id);
-    console.log("data",response.data)
+    // console.log("data",response.data)
     return response.data;
   }
 );
@@ -153,6 +153,8 @@ export const productSlice = createSlice({
         state.status = 'idle';
        const index = state.products.findIndex((el)=>el._id===action.payload._id);
         state.products[index] = action.payload;
+        state.selectedProduct = action.payload;
+
 
       })
   },
@@ -168,4 +170,5 @@ export const selectBrands = (state) => state.product.brands;
 export const selectCategories = (state) => state.product.categories;
 export const selectProductById = (state) => state.product.selectedProduct;
 
+export const selectProductListStatus = (state) => state.product.status;
 export default productSlice.reducer;
