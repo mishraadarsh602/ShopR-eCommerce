@@ -10,9 +10,10 @@ const initialState = {
 //action userdata 
 export const addOrderAsync = createAsyncThunk(
   'order/addOrder',
+  
   async (order) => {
     const response = await addOrder(order);
-    // console.log(item)
+    console.log("response order orderslice",response.data)
     return response.data;
 
   }

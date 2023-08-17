@@ -1,37 +1,50 @@
 
 export function createUser(userData) {
-   return new Promise(async (resolve) => {
-      const response = await fetch('http://localhost:8080/users', {
-         method: "POST",
-         headers: {
-            "Content-Type": "application/json"
-         },
-         body: JSON.stringify(userData)
-      })
-      const data = await response.json()
-      resolve({ data })
+   return new Promise(async (resolve, reject) => {
+
+      try {
+         const response = await fetch('http://localhost:8080/auth/signup', {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+         })
+         const data = await response.json();
+         console.log({data})
+
+         resolve({ data })
+      } catch (err) {
+         reject(err);
+      }
+
    })
 }
 
 
-//cehck user login
+//check user login
 export function checkUser(loginInfo) {
    return new Promise(async (resolve, reject) => {
-      const email = loginInfo.email;
-      const password = loginInfo.password;
-      const response = await fetch('http://localhost:8080/users?email=' + email);
-      const data = await response.json();
-      if (data.length) {
-         if (password === data[0].password) {
-            resolve(data[0])
-         } else {
-            reject({ message: "wrong credentials" })
-         }
 
-      } else {
-         resolve({ message: "User not found" })
+      try {
+         const response = await fetch('http://localhost:8080/auth/login', {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginInfo)
+         });
+         if (response.ok) {
+            const data = await response.json();
+            resolve({ data })
+         } else {
+            const error = await response.json();
+            reject(error)
+         }
       }
-      resolve({ data })
+      catch (err) {
+         reject(err);
+      }
    })
 
 }

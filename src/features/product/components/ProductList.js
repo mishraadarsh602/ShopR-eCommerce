@@ -96,6 +96,7 @@ export default function ProductList() {
       _page: page, _limit: ITEMS_PER_PAGE
     }
     dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }))
+    // console.log("filter, sort, pagination", {filter, sort, pagination })
   }, [dispatch, filter, sort, page]);
 
   const sortOptions = [

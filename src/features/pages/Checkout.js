@@ -8,20 +8,25 @@ import { addOrderAsync, selectCurrentOrder } from '../order/orderSlice';
 // import { updateCartAsync } from '../../features/cart/cartSlice';
 import { selectUserInfo, updateUserAsync } from '../user/userSlice';
 import { discountedPrice } from '../../app/constants';
+import { selectLoggedInUser } from '../auth/authSlice';
 const Checkout = () => {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(true);
-    const user  = useSelector(selectUserInfo);
+   
+    // const user  = useSelector(selectUserInfo);
+     //byme
+    const user  = useSelector(selectLoggedInUser);
+
     const items = useSelector(selectItems);
     const currentOrder = useSelector(selectCurrentOrder);
-    const totalAmount = items.reduce((amount, item) => amount + discountedPrice(item) * item.quantity, 0);
+    const totalAmount = items.reduce((amount, item) => amount + discountedPrice(item.product) * item.quantity, 0);
     const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
     const [selectedAddress,setSelectedAddress] = useState();
     const [paymentMethod,setPaymentMethod] = useState("cash");
 
     const handleQuantity = (e, item) => {
-        dispatch(updateCartAsync({ ...item, quantity: +e.target.value }))
+        dispatch(updateCartAsync({id:item.id, quantity: +e.target.value }))
     }
     const handleRemove = (e, item) => {
         dispatch(deleteItemFromCartAsync(item.id));
@@ -43,9 +48,10 @@ const Checkout = () => {
                 totalItems,
                 paymentMethod,
                 selectedAddress,
-                user,
+                user:user.id,
                 status:"pending",//pending,processing,delivered,canceled,failed
             }
+            console.log("order",order)
         dispatch(addOrderAsync(order));
         
 
@@ -60,16 +66,37 @@ const Checkout = () => {
     return (
         <>
             {!items.length && <Navigate to="/" replace={true}> </Navigate>}
-            {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`} replace={true}> </Navigate>}
+            {currentOrder && <Navigate to={`/order-success/12434324`} replace={true}> </Navigate>}
+
+            {/* {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`} replace={true}> </Navigate>} */}
+   {console.log("currentOrder",currentOrder)}
+   {console.log("currentOrder Id",currentOrder)}
+
+   {console.log("currentOrder",items)}
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                 <div className="grid grid-cols-1 gap-x-5 gap-y-10 lg:grid-cols-5">
                     <div className='lg:col-span-3'>
+                        {console.log("before submit checkout user data",user)}
                         <form className='bg-white px-5 mt-8 py-5' noValidate onSubmit={handleSubmit((data)=>{
-                       dispatch(updateUserAsync({...user,addresses:[...user.addresses,data]})) 
-                       reset()
-                    //    console.log(data);
+                             {console.log("after submit checkout user data",user)}
+                             console.log(data);
+                             if (Array.isArray(user.addresses)) {
+                                // Your dispatch code here
+                                  //    dispatch(updateUserAsync({...user,addresses:[...user.addresses,data]})) ;
+                          dispatch(updateUserAsync({...user,addresses:[...user.addresses,data]}));
+
+
+                            } else {
+                                // console.error("user.addresses is not an array.");
+                                dispatch(updateUserAsync({...user,addresses:[data]}));
+
+                            }
+
+                  
+                      reset()
+                    
                         })}>
                             <div className="space-y-12">
                                 <div className="border-b border-gray-900/10 pb-12">
@@ -202,7 +229,7 @@ const Checkout = () => {
                                         Choose from existing addresses
                                     </p>
                                     <ul role="list">
-                                        {user.addresses &&  user.addresses.map((address,index) => (
+                                         { user.addresses &&  user.addresses.map((address,index) => (
                                             <li key={index} className="border-2 border-gray-200 px-5 flex justify-between gap-x-6 py-5">
 
                                                 <div className="flex gap-x-4">
@@ -230,8 +257,8 @@ const Checkout = () => {
 
                                                 </div>
                                             </li>
-                                        ))}
-                                    </ul>
+                                        ))} 
+                                    </ul> 
 
                                     <div className="mt-10 space-y-10">
 
@@ -291,8 +318,8 @@ const Checkout = () => {
                                             <li key={item.id} className="flex py-6">
                                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                     <img
-                                                        src={item.thumbnail}
-                                                        alt={item.name}
+                                                        src={item.product.thumbnail}
+                                                        alt={item.product.title}
                                                         className="h-full w-full object-cover object-center"
                                                     />
                                                 </div>
@@ -301,11 +328,11 @@ const Checkout = () => {
                                                     <div>
                                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                                             <h3>
-                                                                <a href={item.href}>{item.name}</a>
+                                                                <a href={item.product.id}>{item.title}</a>
                                                             </h3>
-                                                            <p className="ml-4">{discountedPrice(item)}</p>
+                                                            <p className="ml-4">{discountedPrice(item.product)}</p>
                                                         </div>
-                                                        <p className="mt-1 text-sm text-gray-500">{item.name} {item.brand}</p>
+                                                        <p className="mt-1 text-sm text-gray-500">{item.product.name} {item.product.brand}</p>
                                                     </div>
                                                     <div className="flex flex-1 items-end justify-between text-sm">
                                                         <div className="text-gray-500">
@@ -313,7 +340,7 @@ const Checkout = () => {
                                                                 htmlFor="quantity"
                                                                 className="ml-3 mr-5 text-sm text-gray-600"
                                                             >Qty </label>
-                                                            <select onChange={(e) => handleQuantity(e, item)} value={item.value} id="quantity">
+                                                            <select onChange={(e) => handleQuantity(e, item)} value={item.quantity} id="quantity">
                                                                 <option value="1">1</option>
                                                                 <option value="2">2</option>
                                                                 <option value="3">3</option>

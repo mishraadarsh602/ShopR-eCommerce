@@ -8,6 +8,7 @@ export function addOrder(order){
        body:JSON.stringify(order)
     })
     const data  = await response.json()
+    console.log("orderSloce add order ",data)
     resolve({data})
     })
  }

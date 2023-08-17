@@ -9,8 +9,10 @@ const initialState = {
 export const addToCartAsync = createAsyncThunk(
   'cart/addToCart',
   async (item) => {
+    console.log("add to cart cartslice before reposnse",item)
+
     const response = await addToCart(item);
-    // console.log(item)
+    console.log("add to cart cartslice",response.data)
     return response.data;
 
   }
@@ -28,7 +30,10 @@ export const fetchItemsByUserIdAsync = createAsyncThunk(
   export const updateCartAsync = createAsyncThunk(
     'cart/updateCart',
      async (update) => {
+      console.log("update cart cartslice before reposnse",update)
      const response = await updateCart(update);
+     console.log("update cart cartslice after reposnse",update)
+
     return response.data;
   
     }
